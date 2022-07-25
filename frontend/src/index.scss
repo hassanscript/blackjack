@@ -1,0 +1,38 @@
+// global vars
+$maincolor: #ff0051;
+$secondarycolor: #8e002d;
+
+* {
+    font-family: sans-serif;
+}
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+body {
+    padding: 0;
+    margin: 0;
+}
+#header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px;
+    color: white;
+    background-image: linear-gradient($maincolor, $secondarycolor);
+    h1 {
+        margin: 0;
+    }
+}
+#main {
+    padding: 20px 30px;
+    background-color: rgb(242, 242, 242);
+    flex: 1;
+}
+#footer {
+    padding: 10px 30px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0px 30px 50px 1px rgb(142, 142, 142);
+}
