@@ -1,6 +1,9 @@
 // global vars
 $maincolor: #ff0051;
 $secondarycolor: #8e002d;
+$greencolor1:  rgb(16, 107, 73);
+$greencolor2:  rgb(1, 75, 48);
+$accentcolor2: rgb(39, 0, 155);
 
 * {
     font-family: sans-serif;
@@ -29,6 +32,55 @@ body {
     padding: 20px 30px;
     background-color: rgb(242, 242, 242);
     flex: 1;
+    #welcome-view {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .divider {
+            padding: 20px 0px;
+            color: gray;
+            position: relative;
+            &::before, &::after {
+                position: absolute;
+                top: 50%;
+                height: 1px;
+                width: 100px;
+                background-color: gray;
+                content: '';
+            }
+            &::after{
+                left: 150%;
+            }
+            &::before{
+                right: 150%;
+            }
+        }
+        input, button {
+            height: 45px;
+            font-size: 24px;
+            border: none;
+        }
+        button {
+            border-radius: 20px;
+            background-image: linear-gradient($greencolor1, $greencolor2);
+            width: 300px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+        input {
+            text-align: center;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid rgb(210, 210, 210);
+        }
+        
+    }
 }
 #footer {
     padding: 10px 30px;

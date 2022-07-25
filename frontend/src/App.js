@@ -1,7 +1,12 @@
 import Layout from "./Layout";
+import WelcomeView from "./Views/WelcomeView";
 
 function App() {
-  return <Layout> testing</Layout>;
+  return (
+    <Layout>
+      <WelcomeView />
+    </Layout>
+  );
 }
 
 export default App;
