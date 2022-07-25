@@ -1,114 +1,164 @@
 // global vars
 $maincolor: #ff0051;
 $secondarycolor: #8e002d;
-$greencolor1:  rgb(16, 107, 73);
-$greencolor2:  rgb(1, 75, 48);
+$greencolor1: rgb(16, 107, 73);
+$greencolor2: rgb(1, 75, 48);
 $accentcolor2: rgb(39, 0, 155);
 
 * {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
+
+.text {
+  font-size: 14px;
+  color: gray;
+  &.md {
+    font-size: 18px;
+  }
+}
+
 #root {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 body {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
-#loader {
-    z-index: 100000;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(54, 54, 54, 0.603);
-    position: absolute;
-    div {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        img {
-            width: 100px;
-            animation:spin 0.5s linear infinite;
 
-        }
-    }
+#main-loader {
+  z-index: 100000;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(54, 54, 54, 0.603);
+  position: absolute;
+  div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
-@keyframes spin { 
-    100% { 
-        -webkit-transform: rotate(360deg); 
-        transform:rotate(360deg); 
-    } 
-}
-#header{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 10px;
-    color: white;
-    background-image: linear-gradient($maincolor, $secondarycolor);
-    h1 {
-        margin: 0;
-    }
+
+#header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+  color: white;
+  background-image: linear-gradient($maincolor, $secondarycolor);
+  h1 {
+    margin: 0;
+  }
 }
 #main {
-    padding: 20px 30px;
-    background-color: rgb(242, 242, 242);
-    flex: 1;
-    #welcome-view {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        .divider {
-            padding: 20px 0px;
-            color: gray;
-            position: relative;
-            &::before, &::after {
-                position: absolute;
-                top: 50%;
-                height: 1px;
-                width: 100px;
-                background-color: gray;
-                content: '';
-            }
-            &::after{
-                left: 150%;
-            }
-            &::before{
-                right: 150%;
-            }
-        }
-        input, button {
-            height: 45px;
-            font-size: 24px;
-            border: none;
-        }
-        button {
-            border-radius: 20px;
-            background-image: linear-gradient($greencolor1, $greencolor2);
-            width: 300px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            &:hover {
-                transform: scale(1.05);
-            }
-        }
-        input {
-            text-align: center;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: 1px solid rgb(210, 210, 210);
-        }
-        
+  padding: 20px 30px;
+  background-color: rgb(242, 242, 242);
+  flex: 1;
+  #welcome-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    input,
+    button {
+      height: 45px;
+      font-size: 24px;
+      border: none;
     }
+    button {
+      border-radius: 20px;
+      background-image: linear-gradient($greencolor1, $greencolor2);
+      width: 300px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    input {
+      text-align: center;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: 1px solid rgb(210, 210, 210);
+    }
+  }
+  #playing-view {
+    height: 100%;
+    position: relative;
+    #table {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("./Assets/borderImage.jpg");
+      background-position: center;
+      background-size: cover;
+      border-radius: 30px;
+      width: 600px;
+      height: 85%;
+      padding: 25px;
+      box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
+
+      #mat {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        background-color: rgb(1, 199, 100);
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        #game-code-box {
+          position: absolute;
+          left: 50%;
+          top: 30px;
+          transform: translate(-50%, 0%);
+          text-align: center;
+          color: black;
+          background-color: white;
+          padding: 7px 30px;
+          border-radius: 10px;
+          box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
+          border: 3px solid cxxxx4 & > * {
+            margin: 0;
+          }
+          span {
+            font-size: 12px;
+          }
+          h3 {
+            font-size: 30px;
+          }
+        }
+        #game-waiting-box {
+          box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
+
+          background-color: white;
+          padding: 20px;
+          border-radius: 10px;
+          width: 200px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .loader {
+            padding-bottom: 10px;
+          }
+          font-size: 20px;
+          text-align: center;
+        }
+      }
+    }
+  }
 }
 #footer {
-    padding: 10px 30px;
-    text-align: center;
-    font-size: 14px;
-    box-shadow: 0px 30px 50px 1px rgb(142, 142, 142);
+  padding: 10px 30px;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0px 30px 50px 1px rgb(142, 142, 142);
 }

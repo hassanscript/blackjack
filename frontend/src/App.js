@@ -1,6 +1,7 @@
 import Layout from "./Layout";
 import WelcomeView from "./Views/WelcomeView";
-import { useEffect, useState } from "react";
+import PlayingView from "./Views/PlayingView";
+import { useEffect } from "react";
 import { socket } from "./utils";
 import { useAtom } from "jotai";
 import { appState } from "./atoms";
@@ -21,7 +22,7 @@ function App() {
     };
   }, []);
 
-  return <Layout>{!gameCode ? <WelcomeView /> : <>Game is on</>}</Layout>;
+  return <Layout>{!gameCode ? <WelcomeView /> : <PlayingView />}</Layout>;
 }
 
 export default App;

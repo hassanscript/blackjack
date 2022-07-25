@@ -1,0 +1,20 @@
+.loader {
+  &.small img {
+    height: 30px;
+  }
+  &.medium img {
+    height: 60px;
+  }
+  &.large img {
+    height: 120px;
+  }
+  img {
+    animation: spin 0.5s linear infinite;
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

@@ -5,3 +5,7 @@ export const appState = atom({
   connected: false,
   gameCode: null,
 });
+
+export const gameState = atom({
+  waiting: true,
+});

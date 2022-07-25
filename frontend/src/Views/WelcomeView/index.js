@@ -1,11 +1,12 @@
 import JoinGameButton from "./JoinGameButton";
 import CreateGameButton from "./CreateGameButton";
+import { Divider } from "../../Components";
 
 const WelcomeView = ({ setLoading }) => {
   return (
     <div id="welcome-view">
       <CreateGameButton />
-      <div className="divider">OR</div>
+      <Divider text="OR" />
       <JoinGameButton />
     </div>
   );
