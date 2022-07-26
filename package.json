@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "cd backend && npm install && cd ..",
-    "start": "cd backend && npm start"
+    "heroku-prebuild": "cd backend && npm install",
+    "start": "npm start"
   }
 }
