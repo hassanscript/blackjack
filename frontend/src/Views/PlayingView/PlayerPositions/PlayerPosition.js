@@ -1,24 +1,38 @@
 import styles from "./index.module.scss";
-import { useAtom } from "jotai";
-import { gameState } from "../../../atoms";
 import { useEffect, useState } from "react";
+import { useGameStore } from "../../../Stores";
 
 export const PlayerPosition = ({ number }) => {
-  const [game] = useAtom(gameState);
+  const game = useGameStore();
   const [current, setCurrent] = useState(false);
   const [cards, setCards] = useState([]);
+
   useEffect(() => {
     const current = game.myInfo.playerNumber == number;
     setCurrent(current);
+  }, []);
+
+  useEffect(() => {
     let cards;
     if (current) {
       cards = game.myInfo.cards;
-      cards = cards.reverse();
-    } else {
-      cards = Array(game.otherPlayersInfo[0].cardCount).fill(null);
+      setCards(cards);
     }
-    setCards(cards);
-  }, []);
+  }, [current, game.myInfo.cards.length]);
+
+  useEffect(() => {
+    let cards;
+    if (!current) {
+      const player = game.otherPlayersInfo.find(
+        ({ playerNumber }) => playerNumber == number
+      );
+      if (player) {
+        cards = Array(player.cardCount).fill(null);
+      }
+      setCards(cards);
+    }
+  }, [current, game.otherPlayersInfo]);
+
   return (
     <div className={styles[`player${number}`]}>
       <h3>{current ? "You" : `Player ${number}`}</h3>

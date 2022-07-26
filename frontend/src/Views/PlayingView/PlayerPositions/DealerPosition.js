@@ -1,10 +1,9 @@
-import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { gameState } from "../../../atoms";
+import { useGameStore } from "../../../Stores";
 import styles from "./index.module.scss";
 
 export const DealerPosition = () => {
-  const [game] = useAtom(gameState);
+  const game = useGameStore();
   const [cards, setCards] = useState([]);
 
   useEffect(() => {

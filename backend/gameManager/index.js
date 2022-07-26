@@ -19,6 +19,10 @@ class GameManager {
     socket.on("PLAYER_READY", (gameCode) =>
       this.setPlayerReady(gameCode, socket)
     );
+    socket.on("HIT", (gameCode) => this.playerAction("hit", gameCode, socket));
+    socket.on("STAND", (gameCode) =>
+      this.playerAction("hit", gameCode, socket)
+    );
   }
 
   // method to join a new game, takes 2 parameters the game code and the player Id
@@ -59,6 +63,17 @@ class GameManager {
 
     game.setPlayerReady(playerId);
     game.canGameStart();
+  }
+
+  playerAction(action, gameCode, socket) {
+    const game = this.games.get(gameCode);
+    const playerId = socket.id;
+    if (!game) return;
+    if (action == "hit") {
+      game.hit(playerId);
+    } else if (action == "stand") {
+      game.stand(playerId);
+    }
   }
 }
 

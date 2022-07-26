@@ -1,26 +1,15 @@
-import { useAtom } from "jotai";
-import { useEffect } from "react";
-import { appState, gameState } from "../../atoms";
 import { Button, Loader } from "../../Components";
+import { useAppStore, useGameStore } from "../../Stores";
 import { socket } from "../../utils";
 
 export const ReadyBox = () => {
-  const [app] = useAtom(appState);
-  const [game, setGame] = useAtom(gameState);
-
-  useEffect(() => {
-    // socket.on("gameReady", (gameCode) => {
-    //   setApp({ connected: true, loading: false, gameCode });
-    // });
-    // return () => {
-    //   socket.off("gameStarted");
-    // };
-  }, []);
+  const app = useAppStore();
+  const game = useGameStore();
 
   const onReady = () => {
     const { gameCode } = app;
     socket.emit("PLAYER_READY", gameCode);
-    setGame({ ...game, ready: true });
+    game.setReady(true);
   };
 
   if (!game.ready) {

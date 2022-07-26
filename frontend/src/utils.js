@@ -1,3 +1,3 @@
 import io from "socket.io-client";
-
-export const socket = io("/");
+const url = process.env != "production" ? "http://localhost:3003/" : "/";
+export const socket = io(url);

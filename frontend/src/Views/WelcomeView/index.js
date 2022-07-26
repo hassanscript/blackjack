@@ -2,17 +2,15 @@ import JoinGameButton from "./JoinGameButton";
 import CreateGameButton from "./CreateGameButton";
 import { Divider } from "../../Components";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
-import { appState, gameState } from "../../atoms";
 import { socket } from "../../utils";
+import { useAppStore } from "../../Stores";
 
 const WelcomeView = () => {
-  const [app, setApp] = useAtom(appState);
-  const [game, setGame] = useAtom(gameState);
+  const app = useAppStore();
 
   useEffect(() => {
     socket.on("GAME_JOINED", (gameCode) => {
-      setApp({ connected: true, loading: false, gameCode });
+      app.setGameCode(gameCode);
     });
     return () => {
       socket.off("GAME_JOINED");

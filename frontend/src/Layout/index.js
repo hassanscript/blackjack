@@ -1,11 +1,10 @@
 import Footer from "./Footer";
 import Header from "./Header";
-import { useAtom } from "jotai";
-import { appState } from "../atoms";
 import AppLoader from "./AppLoader";
+import { useAppStore } from "../Stores";
 
-const Main = ({ children, loading }) => {
-  const [app] = useAtom(appState);
+const Main = ({ children }) => {
+  const app = useAppStore();
   return (
     <>
       {app.loading && <AppLoader />}

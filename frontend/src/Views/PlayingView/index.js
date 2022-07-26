@@ -1,31 +1,36 @@
-import { appState, gameState } from "../../atoms";
-import { useAtom } from "jotai";
 import { socket } from "../../utils";
 import { useEffect } from "react";
 import { WaitingBox } from "./WaitingBox";
 import { ReadyBox } from "./ReadyBox";
 import PlayerPositions from "./PlayerPositions";
+import { ActionButtons } from "./ActionButtons";
+import { useAppStore, useGameStore } from "../../Stores";
 
 const PlayingView = () => {
-  const [app] = useAtom(appState);
-  const [game, setGame] = useAtom(gameState);
+  const app = useAppStore();
+  const game = useGameStore();
 
   useEffect(() => {
     socket.on("GAME_READY", () => {
-      setGame({ ...game, waiting: false });
+      game.setWaiting(false);
     });
     socket.on("GAME_STARTED", (data) => {
-      setGame({ ...game, waiting: false, ready: true, started: true, ...data });
+      game.setInitialData({ started: true, ...data });
+    });
+    socket.on("UPDATE_GAME", ({ key, value }) => {
+      game.updateData(key, value);
     });
     return () => {
       socket.off("GAME_READY");
       socket.off("GAME_STARTED");
+      socket.off("UPDATE_GAME");
     };
   }, []);
 
   return (
     <div id="playing-view">
       {game.started && <PlayerPositions />}
+      {game.started && <ActionButtons />}
       <div id="table">
         <div id="mat">
           <div id="game-code-box">

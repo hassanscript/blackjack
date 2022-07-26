@@ -31,7 +31,6 @@ class Game {
       return false;
     }
   }
-
   setPlayerReady(playerId) {
     this.players[playerId].ready = true;
   }
@@ -60,19 +59,22 @@ class Game {
     });
   }
 
-  updateClients() {
-    const dealerExposedCard = this.dealer.exposeOneCard();
-    const playersPublicInfo = Object.values(this.players).map((player) =>
+  getPlayersPublicInfo() {
+    let playersPublicInfo = Object.values(this.players).map((player) =>
       player.getPublicInfo()
     );
+    return playersPublicInfo;
+  }
+
+  updateClients() {
+    const exposedCard = this.dealer.exposeOneCard();
+    const otherPlayersInfo = this.getPlayersPublicInfo();
     Object.keys(this.players).forEach((playerId) => {
       const myInfo = this.players[playerId].getPrivateInfo();
       const data = {
         myInfo,
-        dealerExposedCard,
-        otherPlayersInfo: playersPublicInfo.filter(
-          ({ playerNumber }) => playerNumber !== myInfo.playerNumber
-        ),
+        dealer: { exposedCard },
+        otherPlayersInfo,
       };
       this.io.to(playerId).emit("GAME_STARTED", data);
     });
@@ -85,6 +87,23 @@ class Game {
     this.supplyInitialCards();
     this.updateClients();
   }
+  hit(playerId) {
+    const card = this.deck.pop();
+    const player = this.players[playerId];
+    player.receiveCards([card]);
+    this.io.to(`game:${this.gameCode}`).emit("UPDATE_GAME", {
+      key: "otherPlayersInfo",
+      value: this.getPlayersPublicInfo(),
+    });
+    const myInfo = this.players[playerId].getPrivateInfo();
+    this.io.to(playerId).emit("HIT_DONE", myInfo);
+    const bust = player.isBust();
+    if (bust) {
+      this.io.to(`game:${this.gameCode}`).emit("PLAYER_BUST", playerId);
+    }
+    console.log("Bust: " + bust);
+  }
+  stand(playerId) {}
 }
 
 module.exports = Game;
