@@ -1,0 +1,13 @@
+@import "../variables.scss";
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+  color: white;
+  background-image: linear-gradient($maincolor, $secondarycolor);
+  h1 {
+    margin: 0;
+  }
+}

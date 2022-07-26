@@ -1,0 +1,32 @@
+.playerBox {
+  background-color: rgb(200, 200, 200);
+  width: 370px;
+  height: 280px;
+  padding: 20px;
+  border-radius: 20px;
+  position: absolute;
+}
+
+.player1,
+.player2,
+.dealer {
+  @extend .playerBox;
+}
+
+.player1 {
+  right: 50%;
+  top: 50%;
+  transform: translate(-90%, -105%);
+}
+
+.player2 {
+  right: 50%;
+  top: 50%;
+  transform: translate(-90%, 5%);
+}
+
+.dealer {
+  left: 50%;
+  top: 50%;
+  transform: translate(90%, -50%);
+}

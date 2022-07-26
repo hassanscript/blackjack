@@ -18,12 +18,13 @@ class Game {
   }
   isGameReady() {
     if (Object.keys(this.players).length == 2) {
-      this.io.to(`game:${this.gameCode}`).emit("gameReady", true);
+      this.io.to(`game:${this.gameCode}`).emit("GAME_READY", true);
     }
   }
   join(playerId) {
     if (this.canJoin()) {
-      const player = new Player();
+      const playerNumber = Object.keys(this.players).length + 1;
+      const player = new Player(playerNumber);
       this.players[playerId] = player;
       return true;
     } else {
@@ -57,8 +58,24 @@ class Game {
       const cards = this.pickCards(2);
       receiver.receiveCards(cards);
     });
-    console.log(this.dealer);
-    console.log(this.players);
+  }
+
+  updateClients() {
+    const dealerExposedCard = this.dealer.exposeOneCard();
+    const playersPublicInfo = Object.values(this.players).map((player) =>
+      player.getPublicInfo()
+    );
+    Object.keys(this.players).forEach((playerId) => {
+      const myInfo = this.players[playerId].getPrivateInfo();
+      const data = {
+        myInfo,
+        dealerExposedCard,
+        otherPlayersInfo: playersPublicInfo.filter(
+          ({ playerNumber }) => playerNumber !== myInfo.playerNumber
+        ),
+      };
+      this.io.to(playerId).emit("GAME_STARTED", data);
+    });
   }
 
   startGame() {
@@ -66,6 +83,7 @@ class Game {
     this.dealer.reset();
     Object.values(this.players).forEach((player) => player.reset());
     this.supplyInitialCards();
+    this.updateClients();
   }
 }
 

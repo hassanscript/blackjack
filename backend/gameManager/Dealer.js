@@ -11,6 +11,9 @@ class Dealer {
   receiveCards(cards) {
     this.cards.push(...cards);
   }
+  exposeOneCard() {
+    return this.cards[0];
+  }
 }
 
 module.exports = Dealer;

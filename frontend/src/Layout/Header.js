@@ -1,6 +1,8 @@
+import styles from "./Header.module.scss";
+
 const Header = () => {
   return (
-    <header id="header">
+    <header className={styles.header}>
       <h1>Welcome to BlackJack Online</h1>
     </header>
   );

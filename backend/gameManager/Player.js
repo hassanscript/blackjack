@@ -1,5 +1,6 @@
 class Player {
-  constructor() {
+  constructor(playerNumber) {
+    this.playerNumber = playerNumber;
     this.cards = [];
     this.totalScore = 0;
     this.bet = 0;
@@ -13,6 +14,13 @@ class Player {
   }
   receiveCards(cards) {
     this.cards.push(...cards);
+  }
+  getPrivateInfo() {
+    return this;
+  }
+  getPublicInfo() {
+    const { balance, playerNumber, cards } = this;
+    return { balance, playerNumber, cardCount: cards.length };
   }
 }
 

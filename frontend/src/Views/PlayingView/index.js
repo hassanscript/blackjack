@@ -4,22 +4,28 @@ import { socket } from "../../utils";
 import { useEffect } from "react";
 import { WaitingBox } from "./WaitingBox";
 import { ReadyBox } from "./ReadyBox";
+import PlayerPositions from "./PlayerPositions";
 
 const PlayingView = () => {
   const [app] = useAtom(appState);
   const [game, setGame] = useAtom(gameState);
 
   useEffect(() => {
-    socket.on("gameReady", () => {
+    socket.on("GAME_READY", () => {
       setGame({ ...game, waiting: false });
     });
+    socket.on("GAME_STARTED", (data) => {
+      setGame({ ...game, waiting: false, ready: true, started: true, ...data });
+    });
     return () => {
-      socket.off("gameReady");
+      socket.off("GAME_READY");
+      socket.off("GAME_STARTED");
     };
   }, []);
 
   return (
     <div id="playing-view">
+      {game.started && <PlayerPositions />}
       <div id="table">
         <div id="mat">
           <div id="game-code-box">

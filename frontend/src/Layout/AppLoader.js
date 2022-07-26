@@ -1,9 +1,9 @@
-import loadIcon from "../Assets/loadIcon.png";
+import styles from "./AppLoader.module.scss";
 import { Loader } from "../Components";
 
 const AppLoader = () => {
   return (
-    <div id="main-loader">
+    <div className={styles.appLoader}>
       <Loader />
     </div>
   );
