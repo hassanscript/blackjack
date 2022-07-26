@@ -1,23 +1,14 @@
 import { useState } from "react";
-import { appState } from "../../atoms";
 import { socket } from "../../utils";
-import { useAtom } from "jotai";
 
 const JoinGameButton = () => {
-  const [app, setApp] = useAtom(appState);
   const [gameCode, setGameCode] = useState("");
 
   const joinGame = () => {
     // take care of when gamecode is invalid or missing
     if (gameCode) {
-      socket.emit("join", gameCode);
+      socket.emit("JOIN_GAME", gameCode);
     }
-    socket.on("gameStarted", (gameCode) => {
-      setApp({ ...app, gameCode });
-    });
-    return () => {
-      socket.off("gameStarted");
-    };
   };
 
   return (

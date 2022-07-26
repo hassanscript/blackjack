@@ -8,4 +8,6 @@ export const appState = atom({
 
 export const gameState = atom({
   waiting: true,
+  started: false,
+  ready: false,
 });

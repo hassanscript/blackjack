@@ -1,11 +1,22 @@
 import { appState, gameState } from "../../atoms";
 import { useAtom } from "jotai";
-import { Divider, Loader } from "../../Components";
+import { socket } from "../../utils";
 import { useEffect } from "react";
+import { WaitingBox } from "./WaitingBox";
+import { ReadyBox } from "./ReadyBox";
 
 const PlayingView = () => {
   const [app] = useAtom(appState);
   const [game, setGame] = useAtom(gameState);
+
+  useEffect(() => {
+    socket.on("gameReady", () => {
+      setGame({ ...game, waiting: false });
+    });
+    return () => {
+      socket.off("gameReady");
+    };
+  }, []);
 
   return (
     <div id="playing-view">
@@ -15,18 +26,8 @@ const PlayingView = () => {
             <span>GAME CODE</span>
             <h3>{app.gameCode}</h3>
           </div>
-          {game.waiting && (
-            <div id="game-waiting-box">
-              <Loader size="small" />
-              <span className="text md">
-                Waiting for the other player 2 to join
-              </span>
-              <Divider />
-              <span className="text">
-                Share the game code with the other player if you haven't already
-              </span>
-            </div>
-          )}
+          {game.waiting && <WaitingBox />}
+          {!game.waiting && !game.started && <ReadyBox />}
         </div>
       </div>
     </div>

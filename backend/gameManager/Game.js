@@ -1,16 +1,25 @@
+const Dealer = require("./Dealer");
 const generateDeck = require("./generateDeck");
 const Player = require("./Player");
 
-const deck = generateDeck();
-
 class Game {
-  constructor() {
-    this.deck = deck;
+  constructor(gameCode, io) {
+    this.io = io;
+    this.gameCode = gameCode;
+    this.deck = null;
     this.players = {};
     this.dealtCards = [];
+    this.started = false;
+    this.dealer = new Dealer();
   }
+
   canJoin() {
-    return Object.keys(this.players) < 2;
+    return Object.keys(this.players).length < 2;
+  }
+  isGameReady() {
+    if (Object.keys(this.players).length == 2) {
+      this.io.to(`game:${this.gameCode}`).emit("gameReady", true);
+    }
   }
   join(playerId) {
     if (this.canJoin()) {
@@ -20,6 +29,43 @@ class Game {
     } else {
       return false;
     }
+  }
+
+  setPlayerReady(playerId) {
+    this.players[playerId].ready = true;
+  }
+
+  canGameStart(io) {
+    const playersNotReady = Object.values(this.players).filter(
+      ({ ready }) => !ready
+    );
+    if (playersNotReady.length == 0) {
+      this.startGame();
+    }
+  }
+
+  pickCards(quantity = 1) {
+    const cards = [];
+    for (let i = 0; i < quantity; i++) {
+      cards.push(this.deck.pop());
+    }
+    return cards;
+  }
+
+  supplyInitialCards() {
+    [this.dealer, ...Object.values(this.players)].forEach((receiver) => {
+      const cards = this.pickCards(2);
+      receiver.receiveCards(cards);
+    });
+    console.log(this.dealer);
+    console.log(this.players);
+  }
+
+  startGame() {
+    this.deck = generateDeck();
+    this.dealer.reset();
+    Object.values(this.players).forEach((player) => player.reset());
+    this.supplyInitialCards();
   }
 }
 

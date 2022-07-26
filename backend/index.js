@@ -1,13 +1,13 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const GameManager = require("./gameManager");
+const GameManager = require("./GameManager");
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const gameManager = new GameManager();
+const gameManager = new GameManager(io);
 
 io.on("connection", (socket) => {
   gameManager.manage(socket);

@@ -1,19 +1,16 @@
-class Player {
+class Dealer {
   constructor() {
     this.cards = [];
     this.totalScore = 0;
-    this.bet = 0;
-    this.balance = 1000;
-    this.ready = false;
+    this.balance = 100000;
   }
   reset() {
     this.cards = [];
     this.totalScore = 0;
-    this.bet = 0;
   }
   receiveCards(cards) {
     this.cards.push(...cards);
   }
 }
 
-module.exports = Player;
+module.exports = Dealer;
