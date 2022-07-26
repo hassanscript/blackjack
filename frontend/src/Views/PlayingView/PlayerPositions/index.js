@@ -1,12 +1,11 @@
 import { DealerPosition } from "./DealerPosition";
-import { Player1Position } from "./Player1Position";
-import { Player2Position } from "./Player2Position";
+import { PlayerPosition } from "./PlayerPosition";
 
 const PlayerPositions = () => {
   return (
     <>
-      <Player1Position />
-      <Player2Position />
+      <PlayerPosition number={1} />
+      <PlayerPosition number={2} />
       <DealerPosition />
     </>
   );
