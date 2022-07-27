@@ -15,8 +15,17 @@ class GameManager {
   }
 
   manage = (socket) => {
-    socket.on("disconnect", () => {
-      console.log("disconnected");
+    socket.on("disconnecting", () => {
+      var rooms = Array.from(socket.rooms);
+      const games = rooms
+        .map((game) => game.split(":")[1])
+        .filter((game) => game);
+      games.forEach((id) => {
+        const game = this.games.get(id);
+        if (game) {
+          game.leave(socket);
+        }
+      });
     });
     socket.on("JOIN_GAME", (gameCode) => this.joinGame(gameCode, socket));
 
@@ -31,14 +40,17 @@ class GameManager {
     socket.on("NEXT_ROUND", (gameCode) =>
       this.playerAction("next", gameCode, socket)
     );
+
+    socket.on("LEAVE_GAME", (gameCode) => {
+      this.playerAction("leave", gameCode, socket);
+    });
   };
 
   joinGame = (gameCode, socket) => {
     let game;
-
     if (!gameCode) {
       gameCode = generateRandomNumber();
-      game = new Game(gameCode, this.io);
+      game = new Game(gameCode, this.io, this);
       this.games.set(gameCode, game);
     } else {
       game = this.games.get(gameCode);
@@ -70,10 +82,14 @@ class GameManager {
     } else if (action == "stand") {
       game.stand(playerId);
     } else if (action == "next") {
-      console.log("I will next");
-      console.log("PlayerID: " + playerId);
       game.next(playerId);
+    } else if (action == "leave") {
+      game.leave(socket);
     }
+  };
+
+  destroyGame = (gameCode) => {
+    this.games.del(gameCode);
   };
 }
 

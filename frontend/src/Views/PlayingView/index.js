@@ -7,6 +7,7 @@ import { ActionButtons } from "./ActionButtons";
 import { useAppStore, useGameStore } from "../../Stores";
 import { ResultBox } from "./ResultBox";
 import styles from "./index.module.scss";
+import { Button } from "../../Components";
 
 const PlayingView = () => {
   const app = useAppStore();
@@ -37,12 +38,21 @@ const PlayingView = () => {
     };
   }, []);
 
+  const onLeave = () => {
+    app.setGameCode(null);
+    game.reset();
+    socket.emit("LEAVE_GAME", app.gameCode);
+  };
+
   return (
     <div className={styles.playingView}>
       {game.started && <PlayerPositions />}
       <div className={styles.table}>
         {game.started && <ActionButtons />}
         <div className={styles.mat}>
+          <div className={styles.leave}>
+            <Button label="LEAVE" onClick={onLeave} />
+          </div>
           <div className={styles.code}>
             <span>GAME CODE</span>
             <h3>{app.gameCode}</h3>

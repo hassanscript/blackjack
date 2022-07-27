@@ -81,4 +81,23 @@ export const useGameStore = create((set) => ({
       return { ...state, paused: true, gameResults, lastRoundCards };
     }),
   readyForNextRound: () => set((state) => ({ ...state, nextRoundReady: true })),
+  reset: () =>
+    set(() => ({
+      waiting: true,
+      nextRoundReady: false,
+      started: false,
+      ready: false,
+      myInfo: {},
+      allPlayersInfo: {},
+      dealer: {},
+      paused: false,
+      lastRoundCards: {
+        dealer: [],
+        players: [],
+      },
+      gameResults: {
+        rounds: 1,
+        playerResults: [],
+      },
+    })),
 }));

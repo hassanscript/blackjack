@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { Loader } from "../../../Components";
 import { useGameStore } from "../../../Stores";
 import styles from "./index.module.scss";
+import winSound from "../../../Assets/Sounds/win.wav";
+import loseSound from "../../../Assets/Sounds/lose.wav";
+import drawSound from "../../../Assets/Sounds/lose.wav";
+import useSound from "use-sound";
 
 const InfoBox = () => {
   const game = useGameStore();
+  const [playLose] = useSound(loseSound);
+  const [playWin] = useSound(winSound);
+  const [playDraw] = useSound(drawSound);
   const [result, setResult] = useState({ state: null, text: null });
   const { myInfo, paused } = game;
   const waiting = !paused && (myInfo.standing || myInfo.bust);
@@ -13,12 +20,18 @@ const InfoBox = () => {
     const player = game.gameResults.playerResults.find(
       (p) => p.playerNumber == playerNumber
     );
-    if (player) {
+    if (player && game.paused) {
       const { lastResult } = player;
-      if (lastResult == "win") setResult({ state: "win", text: "YOU WON!" });
-      else if (lastResult == "looses")
+      if (lastResult == "win") {
+        setResult({ state: "win", text: "YOU WON!" });
+        playWin();
+      } else if (lastResult == "looses") {
         setResult({ state: "looses", text: "YOU LOST!" });
-      else setResult({ state: "draw", text: "DRAW!" });
+        playLose();
+      } else {
+        setResult({ state: "draw", text: "DRAW!" });
+        playDraw();
+      }
     }
   }, [game.paused]);
   let text = "";

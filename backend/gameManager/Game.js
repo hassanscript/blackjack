@@ -3,7 +3,8 @@ const generateDeck = require("./generateDeck");
 const Player = require("./Player");
 
 class Game {
-  constructor(gameCode, io) {
+  constructor(gameCode, io, gameManager) {
+    this.gameManager = gameManager;
     this.io = io;
     this.gameCode = gameCode;
     this.roomCode = `game:${this.gameCode}`;
@@ -25,10 +26,25 @@ class Game {
     }
   };
 
+  availablePlayerNumber = () => {
+    const takenNumbers = Object.values(this.players).map(
+      ({ playerNumber }) => playerNumber
+    );
+    let start = 1;
+    while (true) {
+      if (takenNumbers.includes(start)) {
+        start++;
+      } else {
+        break;
+      }
+    }
+    return start;
+  };
+
   join = (socket) => {
     const playerId = socket.id;
     if (this.canJoin()) {
-      const playerNumber = Object.keys(this.players).length + 1;
+      const playerNumber = this.availablePlayerNumber();
       const player = new Player(playerNumber);
       this.players[playerId] = player;
       socket.join(this.roomCode);
@@ -179,6 +195,24 @@ class Game {
     }
     if (this.continueApproval.length == Object.keys(this.players).length) {
       this.startRound();
+    }
+  };
+
+  leave = (socket) => {
+    if (!this.players[socket.id]) return;
+    socket.leave(this.roomCode);
+    delete this.players[socket.id];
+    if (Object.keys(this.players).length == 0) {
+      this.gameManager.destroyGame(this.gameCode);
+      socket.emit("GAME_DESTROYED");
+    } else {
+      Object.values(this.players).map((player) => {
+        player.reset();
+        player.ready = false;
+      });
+      this.dealer.reset();
+      this.rounds = 1;
+      this.io.to(this.roomCode).emit("PLAYER_LEFT");
     }
   };
 }
