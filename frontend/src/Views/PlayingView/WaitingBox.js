@@ -2,7 +2,7 @@ import { Divider, Loader } from "../../Components";
 
 export const WaitingBox = () => {
   return (
-    <div className="game-info-box">
+    <div className="dataBox">
       <Loader size="small" />
       <span className="text md">Waiting for the other player 2 to join</span>
       <Divider />

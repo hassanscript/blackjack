@@ -33,13 +33,17 @@ class Game {
       const player = new Player(playerNumber);
       this.players[playerId] = player;
       socket.join(this.roomCode());
+      socket.rooms.add(this.roomCode());
       socket.emit("GAME_JOINED", this.gameCode);
     } else {
       socket.emit("WRONG_GAMECODE", "Game already has max number of players");
     }
   };
 
-  setPlayerReady = (playerId) => this.players[playerId].ready();
+  setPlayerReady = (playerId) => {
+    const player = this.players[playerId];
+    if (player) this.players[playerId].ready = true;
+  };
 
   canGameStart = () => {
     const playersNotReady = Object.values(this.players).filter(

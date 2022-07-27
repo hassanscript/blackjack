@@ -15,6 +15,9 @@ class GameManager {
   }
 
   manage(socket) {
+    socket.on("disconnect", () => {
+      console.log("disconnected");
+    });
     socket.on("JOIN_GAME", (gameCode) => this.joinGame(gameCode, socket));
     socket.on("PLAYER_READY", (gameCode) =>
       this.setPlayerReady(gameCode, socket)

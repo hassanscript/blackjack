@@ -1,6 +1,6 @@
 // global vars
-$maincolor: #ff0051;
-$secondarycolor: #8e002d;
+$red1: #ff0051;
+$red2: #8e002d;
 $green1: rgb(16, 107, 73);
 $green2: rgb(1, 75, 48);
 $accentcolor2: rgb(39, 0, 155);
@@ -28,77 +28,25 @@ body {
   overflow: hidden;
 }
 
+.dataBox {
+  box-shadow: 0px 0px 20px 0px rgb(98, 98, 98);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+}
+
 #main {
   padding: 20px 30px;
   background-color: rgb(242, 242, 242);
   flex: 1;
-  #playing-view {
-    height: 100%;
-    position: relative;
-    #table {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background-image: url("./Assets/borderImage.jpg");
-      background-position: center;
-      background-size: cover;
-      border-radius: 30px;
-      width: 600px;
-      height: 85%;
-      padding: 25px;
-      box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
-
-      #mat {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        background-color: rgb(1, 199, 100);
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
-        #game-code-box {
-          position: absolute;
-          left: 50%;
-          top: 30px;
-          transform: translate(-50%, 0%);
-          text-align: center;
-          color: black;
-          background-color: white;
-          padding: 7px 30px;
-          border-radius: 10px;
-          box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
-          border: 3px solid;
-          & > * {
-            margin: 0;
-          }
-          span {
-            font-size: 12px;
-          }
-          h3 {
-            font-size: 30px;
-          }
-        }
-        .game-info-box {
-          box-shadow: 0px 0px 20px 0px rgb(143, 143, 143);
-
-          background-color: white;
-          padding: 20px;
-          border-radius: 10px;
-          width: 200px;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          .loader {
-            padding-bottom: 10px;
-          }
-          font-size: 20px;
-          text-align: center;
-        }
-      }
-    }
-  }
 }

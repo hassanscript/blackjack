@@ -20,7 +20,7 @@ const WelcomeView = () => {
   }, []);
 
   return (
-    <div className={styles.welcome}>
+    <div className={styles.welcomeView}>
       <CreateGameButton />
       <Divider space={40} text="OR" />
       <JoinGameButton />

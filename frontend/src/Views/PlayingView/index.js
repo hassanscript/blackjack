@@ -6,6 +6,7 @@ import PlayerPositions from "./PlayerPositions";
 import { ActionButtons } from "./ActionButtons";
 import { useAppStore, useGameStore } from "../../Stores";
 import { ResultBox } from "./ResultBox";
+import styles from "./index.module.scss";
 
 const PlayingView = () => {
   const app = useAppStore();
@@ -37,12 +38,12 @@ const PlayingView = () => {
   }, []);
 
   return (
-    <div id="playing-view">
+    <div className={styles.playingView}>
       {game.started && <PlayerPositions />}
-      {game.started && <ActionButtons />}
-      <div id="table">
-        <div id="mat">
-          <div id="game-code-box">
+      <div className={styles.table}>
+        {game.started && <ActionButtons />}
+        <div className={styles.mat}>
+          <div className={styles.code}>
             <span>GAME CODE</span>
             <h3>{app.gameCode}</h3>
           </div>

@@ -1,0 +1,44 @@
+@import "../../../variables.scss";
+
+.result {
+  background-image: url("../../../Assets/paperTexture.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  top: 53%;
+  padding: 10px 20px;
+  border-radius: 5px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 300px;
+  width: 250px;
+  h3 {
+    font-size: 26px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin: 0;
+  }
+  table {
+    width: 100%;
+    tr {
+      text-align: left;
+      font-size: 18px;
+    }
+    td,
+    th {
+      padding-bottom: 10px;
+    }
+    .count {
+      text-align: center;
+    }
+    .wins {
+      color: green;
+      font-weight: bold;
+    }
+    .looses {
+      color: $red1;
+      font-weight: bold;
+    }
+  }
+}

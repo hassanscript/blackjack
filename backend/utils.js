@@ -1,5 +1,5 @@
 const generateRandomNumber = () =>
-  Math.floor(Math.random() * (9999 - 1000)) + 1000;
+  Math.floor(Math.random() * (99999 - 10000)) + 10000;
 
 // stackoverflow to the rescue
 const generateCombinations = (...args) => {

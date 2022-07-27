@@ -44,9 +44,6 @@ class Player {
       looses,
     };
   }
-  ready() {
-    this.ready = true;
-  }
   stand() {
     this.standing = true;
   }

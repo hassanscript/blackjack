@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Divider } from "../../Components";
-import { useGameStore } from "../../Stores";
-import styles from "./ResultBox.module.scss";
+import { Divider } from "../../../Components";
+import { useGameStore } from "../../../Stores";
+import styles from "./index.module.scss";
 
 export const ResultBox = () => {
   const game = useGameStore();
@@ -19,22 +19,25 @@ export const ResultBox = () => {
       setResult(playerResults);
     }
   }, [game.gameResults]);
+
   return (
     <div className={styles.result}>
       <h3>ROUND {game.gameResults.rounds}</h3>
       <table>
-        <tr>
-          <th>Player</th>
-          <th>Wins</th>
-          <th>Looses</th>
-        </tr>
-        {result.map(({ playerNumber, wins, looses }) => (
+        <tbody>
           <tr>
-            <td>Player {playerNumber}</td>
-            <td>{wins}</td>
-            <td>{looses}</td>
+            <th>Player</th>
+            <th className={styles.count}>Wins</th>
+            <th className={styles.count}>Looses</th>
           </tr>
-        ))}
+          {result.map(({ playerNumber, wins, looses }, index) => (
+            <tr key={"result" + index}>
+              <td>Player {playerNumber}</td>
+              <td className={`${styles.count} ${styles.wins}`}>{wins}</td>
+              <td className={`${styles.count} ${styles.looses}`}>{looses}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

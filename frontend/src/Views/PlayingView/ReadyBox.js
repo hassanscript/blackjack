@@ -14,17 +14,17 @@ export const ReadyBox = () => {
 
   if (!game.ready) {
     return (
-      <div className="game-info-box">
+      <div className="dataBox">
         <div className="text" style={{ paddingBottom: "10px" }}>
           Please click on the button below once you are ready to start
         </div>
-        <Button label="READY" onClick={onReady} />
+        <Button label="READY" color="blue" onClick={onReady} />
       </div>
     );
   }
 
   return (
-    <div className="game-info-box">
+    <div className="dataBox">
       <Loader size="small" />
       <span className="text md">Waiting for the other player to be ready</span>
     </div>
