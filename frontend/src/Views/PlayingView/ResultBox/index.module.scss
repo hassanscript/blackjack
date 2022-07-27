@@ -10,7 +10,7 @@
   border-radius: 5px;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 300px;
+  height: 350px;
   width: 250px;
   h3 {
     font-size: 26px;
@@ -40,5 +40,29 @@
       color: $red1;
       font-weight: bold;
     }
+  }
+  .infoBox {
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    & > *:not(:last-child) {
+      padding-bottom: 5px;
+    }
+  }
+  .resultText {
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .win {
+    color: green;
+  }
+  .looses {
+    color: red;
+  }
+  .draw {
+    color: rgb(167, 167, 0);
   }
 }

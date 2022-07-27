@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Divider } from "../../../Components";
 import { useGameStore } from "../../../Stores";
 import styles from "./index.module.scss";
+import InfoBox from "./InfoBox";
 
 export const ResultBox = () => {
   const game = useGameStore();
@@ -9,7 +10,7 @@ export const ResultBox = () => {
   useEffect(() => {
     const { playerResults } = game.gameResults;
     if (playerResults.length == 0) {
-      const result = game.otherPlayersInfo.map(({ playerNumber }) => ({
+      const result = game.allPlayersInfo.map(({ playerNumber }) => ({
         playerNumber,
         wins: 0,
         looses: 0,
@@ -39,6 +40,8 @@ export const ResultBox = () => {
           ))}
         </tbody>
       </table>
+      <Divider />
+      <InfoBox />
     </div>
   );
 };

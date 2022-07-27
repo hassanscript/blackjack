@@ -6,6 +6,7 @@ class Game {
   constructor(gameCode, io) {
     this.io = io;
     this.gameCode = gameCode;
+    this.roomCode = `game:${this.gameCode}`;
     this.deck = null;
     this.rounds = 1;
     this.players = {};
@@ -16,13 +17,11 @@ class Game {
     this.maxPlayerCount = 2;
   }
 
-  roomCode = () => `game:${this.gameCode}`;
-
   canJoin = () => Object.keys(this.players).length < this.maxPlayerCount;
 
   isGameReady = () => {
     if (Object.keys(this.players).length == this.maxPlayerCount) {
-      this.io.to(`game:${this.gameCode}`).emit("GAME_READY", true);
+      this.io.to(this.roomCode).emit("GAME_READY", true);
     }
   };
 
@@ -32,8 +31,8 @@ class Game {
       const playerNumber = Object.keys(this.players).length + 1;
       const player = new Player(playerNumber);
       this.players[playerId] = player;
-      socket.join(this.roomCode());
-      socket.rooms.add(this.roomCode());
+      socket.join(this.roomCode);
+      socket.rooms.add(this.roomCode);
       socket.emit("GAME_JOINED", this.gameCode);
     } else {
       socket.emit("WRONG_GAMECODE", "Game already has max number of players");
@@ -45,11 +44,11 @@ class Game {
     if (player) this.players[playerId].ready = true;
   };
 
-  canGameStart = () => {
+  tryStartingGame = () => {
     const playersNotReady = Object.values(this.players).filter(
       ({ ready }) => !ready
     );
-    if (playersNotReady.length == 0) this.startGame();
+    if (playersNotReady.length == 0) this.startRound();
   };
 
   pickCards = (quantity = 1) => {
@@ -71,48 +70,60 @@ class Game {
     return Object.values(this.players).map((player) => player.getPublicInfo());
   };
 
-  updateClients() {
+  startRound = () => {
+    this.continueApproval = [];
+    this.paused = false;
+    this.deck = generateDeck();
+    this.dealer.reset();
+    Object.values(this.players).forEach((player) => player.reset());
+    this.supplyInitialCards();
     const exposedCard = this.dealer.exposeOneCard();
-    const otherPlayersInfo = this.getPlayersPublicInfo();
+    const allPlayersInfo = this.getPlayersPublicInfo();
     Object.keys(this.players).forEach((playerId) => {
       const myInfo = this.players[playerId].getPrivateInfo();
       const data = {
         myInfo,
         dealer: { exposedCard },
-        otherPlayersInfo,
+        allPlayersInfo,
       };
       this.io.to(playerId).emit("GAME_STARTED", data);
     });
-  }
+  };
 
-  startGame() {
-    this.deck = generateDeck();
-    this.dealer.reset();
-    Object.values(this.players).forEach((player) => player.reset());
-    this.supplyInitialCards();
-    this.updateClients();
-  }
-  hit(playerId) {
-    const card = this.deck.pop();
+  hit = (playerId) => {
+    if (this.paused) return;
     const player = this.players[playerId];
-    if (player.bust) return;
+    if (!player || player.bust || player.standing) return;
+    const card = this.deck.pop();
     player.receiveCards([card]);
-    this.io.to(`game:${this.gameCode}`).emit("UPDATE_GAME", {
-      key: "otherPlayersInfo",
+    this.io.to(this.roomCode).emit("UPDATE_GAME", {
+      key: "allPlayersInfo",
       value: this.getPlayersPublicInfo(),
     });
-    const myInfo = this.players[playerId].getPrivateInfo();
+    const myInfo = player.getPrivateInfo();
     this.io.to(playerId).emit("HIT_DONE", myInfo);
     const bust = player.isBust();
     if (bust) {
-      this.io
-        .to(`game:${this.gameCode}`)
-        .emit("PLAYER_BUSTED", player.playerNumber);
-      this.checkIfAllBustOrStanding();
+      this.io.to(this.roomCode).emit("PLAYER_BUSTED", player.playerNumber);
+      this.checkAndUpdateIfRoundEnded();
     }
-  }
+  };
 
-  shareRoundResult() {
+  stand = (playerId) => {
+    if (this.paused) return;
+    const player = this.players[playerId];
+    if (!player || player.bust) return;
+    player.stand();
+    this.io.to(this.roomCode).emit("UPDATE_GAME", {
+      key: "allPlayersInfo",
+      value: this.getPlayersPublicInfo(),
+    });
+    const myInfo = player.getPrivateInfo();
+    this.io.to(playerId).emit("STAND_DONE", myInfo);
+    this.checkAndUpdateIfRoundEnded();
+  };
+
+  shareRoundResult = () => {
     const dealerCards = this.dealer.cards;
     const playerInfo = Object.values(this.players).map((player) =>
       player.getRoundResult()
@@ -122,10 +133,10 @@ class Game {
       dealerCards,
       playerInfo,
     };
-    this.io.to(`game:${this.gameCode}`).emit("ROUND_RESULT", results);
-  }
+    this.io.to(this.roomCode).emit("ROUND_RESULT", results);
+  };
 
-  dealerPicks() {
+  dealerPicks = () => {
     let score = this.dealer.bestScore();
     while (score < 17) {
       const card = this.pickCards();
@@ -133,53 +144,43 @@ class Game {
       score = this.dealer.bestScore();
     }
     return score;
-  }
+  };
 
-  checkResults() {
+  calculateResultForStandingPlayers = () => {
     const dealerScore = this.dealerPicks();
     const standingPlayers = Object.values(this.players).filter(
       ({ standing }) => standing
     );
     const dealerLost = dealerScore > 21;
     standingPlayers.forEach((player) => {
-      if (dealerLost) player.wins++;
-      else player.didWin(dealerScore);
+      if (dealerLost) {
+        player.win();
+      } else player.didWin(dealerScore);
     });
-  }
+  };
 
-  checkIfAllBustOrStanding() {
+  checkAndUpdateIfRoundEnded = () => {
     const busts = Object.values(this.players).filter(({ bust }) => bust).length;
     const stands = Object.values(this.players).filter(
       ({ standing }) => standing
     ).length;
     const playerCount = Object.keys(this.players).length;
-    if (busts == playerCount) {
+    if (busts + stands == playerCount) {
       this.rounds++;
       this.paused = true;
+      if (stands) this.calculateResultForStandingPlayers();
       return this.shareRoundResult();
     }
-    if (busts + stands == playerCount) {
-      this.round++;
-      this.paused = true;
-      this.checkResults();
-      return this.shareRoundResult();
-    }
-  }
+  };
 
-  next(playerId) {
+  next = (playerId) => {
     if (!this.continueApproval.find((p) => p == playerId)) {
       this.continueApproval.push(playerId);
     }
     if (this.continueApproval.length == Object.keys(this.players).length) {
-      this.startGame();
+      this.startRound();
     }
-  }
-
-  stand(playerId) {
-    const player = this.players[playerId];
-    player.stand();
-    this.checkIfAllBustOrStanding();
-  }
+  };
 }
 
 module.exports = Game;

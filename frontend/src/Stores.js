@@ -11,10 +11,11 @@ export const useAppStore = create((set) => ({
 
 export const useGameStore = create((set) => ({
   waiting: true,
+  nextRoundReady: false,
   started: false,
   ready: false,
   myInfo: {},
-  otherPlayersInfo: {},
+  allPlayersInfo: {},
   dealer: {},
   paused: false,
   lastRoundCards: {
@@ -29,11 +30,16 @@ export const useGameStore = create((set) => ({
   setStarted: (started) => set((state) => ({ ...state, started })),
   setReady: (ready) => set((state) => ({ ...state, ready })),
   setInitialData: (data) =>
-    set((state) => ({ ...state, paused: false, ...data })),
+    set((state) => ({
+      ...state,
+      nextRoundReady: false,
+      paused: false,
+      ...data,
+    })),
   updateData: (key, value) => set((state) => ({ ...state, [key]: value })),
   handleBust: (playerNumber) =>
     set((state) => {
-      const players = JSON.parse(JSON.stringify(state.otherPlayersInfo));
+      const players = JSON.parse(JSON.stringify(state.allPlayersInfo));
       const player = players.find((p) => p.playerNumber == playerNumber);
       player.bust = true;
       const isSelf = playerNumber == state.myInfo.playerNumber;
@@ -41,12 +47,12 @@ export const useGameStore = create((set) => ({
         return {
           ...state,
           myInfo: { ...state.myInfo, bust: true },
-          otherPlayersInfo: players,
+          allPlayersInfo: players,
         };
       } else {
         return {
           ...state,
-          otherPlayersInfo: players,
+          allPlayersInfo: players,
         };
       }
     }),
@@ -61,17 +67,18 @@ export const useGameStore = create((set) => ({
         })),
       };
       const playerResults = playerInfo.map(
-        ({ playerNumber, wins, looses }) => ({
+        ({ playerNumber, wins, looses, lastResult }) => ({
           playerNumber,
           wins,
           looses,
+          lastResult,
         })
       );
       const gameResults = {
         rounds,
         playerResults,
       };
-      console.log({ ...state, paused: true, gameResults, lastRoundCards });
       return { ...state, paused: true, gameResults, lastRoundCards };
     }),
+  readyForNextRound: () => set((state) => ({ ...state, nextRoundReady: true })),
 }));

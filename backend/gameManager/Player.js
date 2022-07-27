@@ -9,11 +9,13 @@ class Player {
     this.ready = false;
     this.bust = false;
     this.standing = false;
+    this.lastResult = null;
   }
   reset() {
     this.cards = [];
     this.bust = false;
     this.standing = false;
+    this.lastResult = null;
   }
   receiveCards(cards) {
     if (!this.bust && !this.standing) this.cards.push(...cards);
@@ -22,8 +24,14 @@ class Player {
     return this;
   }
   getPublicInfo() {
-    const { playerNumber, cards, bust } = this;
-    return { playerNumber, cardCount: cards.length, bust };
+    const { playerNumber, cards, bust, standing, lastResult } = this;
+    return {
+      playerNumber,
+      cardCount: cards.length,
+      bust,
+      standing,
+      lastResult,
+    };
   }
   isBust() {
     const values = this.cards.map(({ value }) => value);
@@ -32,16 +40,19 @@ class Player {
     sums = sums.sort((a, b) => b - a).filter((num) => num <= 21);
     const bust = sums.length == 0;
     this.bust = bust;
-    if (bust) this.looses++;
+    if (bust) {
+      this.lose();
+    }
     return bust;
   }
   getRoundResult() {
-    const { cards, playerNumber, wins, looses } = this;
+    const { cards, playerNumber, wins, looses, lastResult } = this;
     return {
       cards,
       playerNumber,
       wins,
       looses,
+      lastResult,
     };
   }
   stand() {
@@ -53,10 +64,18 @@ class Player {
     let sums = combinations.map((arr) => arr.reduce((a, b) => a + b, 0));
     sums = sums.sort((a, b) => b - a).filter((num) => num <= 21);
     if (sums[0] > score) {
-      this.wins++;
+      this.win();
     } else if (sums[0] < score) {
-      this.looses++;
+      this.lose();
     }
+  }
+  win() {
+    this.wins++;
+    this.lastResult = "win";
+  }
+  lose() {
+    this.looses++;
+    this.lastResult = "looses";
   }
 }
 

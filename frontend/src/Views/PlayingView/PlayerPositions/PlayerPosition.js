@@ -29,7 +29,7 @@ export const PlayerPosition = ({ number }) => {
         );
         setCards(player.cards);
       } else {
-        const player = game.otherPlayersInfo.find(
+        const player = game.allPlayersInfo.find(
           ({ playerNumber }) => playerNumber == number
         );
         if (player) {
@@ -40,7 +40,7 @@ export const PlayerPosition = ({ number }) => {
         }
       }
     }
-  }, [current, game.otherPlayersInfo, game.paused]);
+  }, [current, game.allPlayersInfo, game.paused]);
 
   return (
     <div className={styles[`player${number}`]}>
@@ -49,7 +49,9 @@ export const PlayerPosition = ({ number }) => {
           <div>BUSTED</div>
         </div>
       )}
-      <h3>{current ? "You" : `Player ${number}`}</h3>
+      <h3>
+        Player {number} {current && "(You)"}
+      </h3>
       <div className={styles.cards}>
         {cards.reverse().map((card, index) => {
           let imgLink = null;
