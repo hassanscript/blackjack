@@ -7,10 +7,12 @@ class Game {
     this.io = io;
     this.gameCode = gameCode;
     this.deck = null;
+    this.rounds = 0;
     this.players = {};
-    this.dealtCards = [];
     this.started = false;
     this.dealer = new Dealer();
+    this.paused = false;
+    this.continueApproval = [];
   }
 
   canJoin() {
@@ -34,8 +36,7 @@ class Game {
   setPlayerReady(playerId) {
     this.players[playerId].ready = true;
   }
-
-  canGameStart(io) {
+  canGameStart() {
     const playersNotReady = Object.values(this.players).filter(
       ({ ready }) => !ready
     );
@@ -43,7 +44,6 @@ class Game {
       this.startGame();
     }
   }
-
   pickCards(quantity = 1) {
     const cards = [];
     for (let i = 0; i < quantity; i++) {
@@ -51,21 +51,18 @@ class Game {
     }
     return cards;
   }
-
   supplyInitialCards() {
     [this.dealer, ...Object.values(this.players)].forEach((receiver) => {
       const cards = this.pickCards(2);
       receiver.receiveCards(cards);
     });
   }
-
   getPlayersPublicInfo() {
     let playersPublicInfo = Object.values(this.players).map((player) =>
       player.getPublicInfo()
     );
     return playersPublicInfo;
   }
-
   updateClients() {
     const exposedCard = this.dealer.exposeOneCard();
     const otherPlayersInfo = this.getPlayersPublicInfo();
@@ -79,7 +76,6 @@ class Game {
       this.io.to(playerId).emit("GAME_STARTED", data);
     });
   }
-
   startGame() {
     this.deck = generateDeck();
     this.dealer.reset();
@@ -90,6 +86,7 @@ class Game {
   hit(playerId) {
     const card = this.deck.pop();
     const player = this.players[playerId];
+    if (player.bust) return;
     player.receiveCards([card]);
     this.io.to(`game:${this.gameCode}`).emit("UPDATE_GAME", {
       key: "otherPlayersInfo",
@@ -99,10 +96,33 @@ class Game {
     this.io.to(playerId).emit("HIT_DONE", myInfo);
     const bust = player.isBust();
     if (bust) {
-      this.io.to(`game:${this.gameCode}`).emit("PLAYER_BUST", playerId);
+      this.io
+        .to(`game:${this.gameCode}`)
+        .emit("PLAYER_BUSTED", player.playerNumber);
+      this.checkIfAllBust();
     }
-    console.log("Bust: " + bust);
   }
+  shareRoundResult() {
+    const dealerCards = this.dealer.cards;
+    const playerInfo = Object.values(this.players).map((player) =>
+      player.getRoundResult()
+    );
+    const results = {
+      rounds: this.rounds,
+      dealerCards,
+      playerInfo,
+    };
+    this.io.to(`game:${this.gameCode}`).emit("ROUND_RESULT", results);
+  }
+  checkIfAllBust() {
+    const busts = Object.values(this.players).filter(({ bust }) => bust).length;
+    if (busts == Object.keys(this.players).length) {
+      this.rounds++;
+      this.paused = true;
+      this.shareRoundResult();
+    }
+  }
+
   stand(playerId) {}
 }
 

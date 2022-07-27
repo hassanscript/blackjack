@@ -7,6 +7,8 @@ export const ActionButtons = () => {
   const app = useAppStore();
   const game = useGameStore();
 
+  const busted = game.myInfo.bust;
+
   useEffect(() => {
     socket.on("HIT_DONE", (myInfo) => {
       game.updateData("myInfo", myInfo);
@@ -30,10 +32,18 @@ export const ActionButtons = () => {
   };
   return (
     <div className={styles.actionButtons}>
-      <button onClick={onHit} disabled={loading} className={styles.hit}>
+      <button
+        onClick={onHit}
+        disabled={loading || busted}
+        className={styles.hit}
+      >
         HIT
       </button>
-      <button onClick={onStand} disabled={loading} className={styles.stand}>
+      <button
+        onClick={onStand}
+        disabled={loading || busted}
+        className={styles.stand}
+      >
         STAND
       </button>
     </div>

@@ -6,6 +6,7 @@ export const PlayerPosition = ({ number }) => {
   const game = useGameStore();
   const [current, setCurrent] = useState(false);
   const [cards, setCards] = useState([]);
+  const [bust, setBust] = useState(false);
 
   useEffect(() => {
     const current = game.myInfo.playerNumber == number;
@@ -13,28 +14,34 @@ export const PlayerPosition = ({ number }) => {
   }, []);
 
   useEffect(() => {
-    let cards;
     if (current) {
-      cards = game.myInfo.cards;
+      const { cards, bust } = game.myInfo;
+      setBust(bust);
       setCards(cards);
     }
-  }, [current, game.myInfo.cards.length]);
+  }, [current, game.myInfo.cards.length, game.myInfo.bust]);
 
   useEffect(() => {
-    let cards;
     if (!current) {
       const player = game.otherPlayersInfo.find(
         ({ playerNumber }) => playerNumber == number
       );
       if (player) {
-        cards = Array(player.cardCount).fill(null);
+        let cards = Array(player.cardCount).fill(null);
+        const { bust } = player;
+        setCards(cards);
+        setBust(bust);
       }
-      setCards(cards);
     }
   }, [current, game.otherPlayersInfo]);
 
   return (
     <div className={styles[`player${number}`]}>
+      {bust && (
+        <div className={styles.bust}>
+          <div>BUSTED</div>
+        </div>
+      )}
       <h3>{current ? "You" : `Player ${number}`}</h3>
       <div className={styles.cards}>
         {cards.reverse().map((card, index) => {

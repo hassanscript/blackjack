@@ -17,6 +17,12 @@ const PlayingView = () => {
     socket.on("GAME_STARTED", (data) => {
       game.setInitialData({ started: true, ...data });
     });
+    socket.on("PLAYER_BUSTED", (playerNumber) => {
+      game.handleBust(playerNumber);
+    });
+    socket.on("ROUND_RESULT", (result) => {
+      game.handleResult(result);
+    });
     socket.on("UPDATE_GAME", ({ key, value }) => {
       game.updateData(key, value);
     });
@@ -24,6 +30,8 @@ const PlayingView = () => {
       socket.off("GAME_READY");
       socket.off("GAME_STARTED");
       socket.off("UPDATE_GAME");
+      socket.off("PLAYER_BUSTED");
+      socket.off("ROUND_RESULTS");
     };
   }, []);
 

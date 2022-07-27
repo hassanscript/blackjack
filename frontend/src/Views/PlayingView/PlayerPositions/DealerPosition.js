@@ -7,9 +7,13 @@ export const DealerPosition = () => {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    const { dealerExposedCard } = game;
-    setCards([null, dealerExposedCard]);
-  }, []);
+    if (game.paused) {
+      setCards(game.lastRoundCards.dealer);
+    } else {
+      const { dealerExposedCard } = game;
+      setCards([null, dealerExposedCard]);
+    }
+  }, [game.paused]);
 
   return (
     <div className={styles.dealer}>
