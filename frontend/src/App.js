@@ -2,7 +2,7 @@ import Layout from "./Layout";
 import WelcomeView from "./Views/WelcomeView";
 import PlayingView from "./Views/PlayingView";
 import { useEffect } from "react";
-import { socket } from "./utils";
+import { preloadCards, socket } from "./utils";
 import { useAppStore, useGameStore } from "./Stores";
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
   const game = useGameStore();
   const { gameCode } = app;
   useEffect(() => {
+    preloadCards();
     socket.on("connect", () => {
       app.setConnected(true);
       app.setLoading(false);

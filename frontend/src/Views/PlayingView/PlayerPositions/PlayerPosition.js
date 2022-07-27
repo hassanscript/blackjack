@@ -43,7 +43,9 @@ export const PlayerPosition = ({ number }) => {
   }, [current, game.allPlayersInfo, game.paused]);
 
   return (
-    <div className={styles[`player${number}`]}>
+    <div
+      className={`${styles[`player${number}`]} ${current && styles.current}`}
+    >
       {bust && (
         <div className={styles.bust}>
           <div>BUSTED</div>

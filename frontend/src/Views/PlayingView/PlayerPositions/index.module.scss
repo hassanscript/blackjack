@@ -1,10 +1,10 @@
 @import "../../../variables.scss";
 
 .playerBox {
-  box-shadow: 0px 0px 20px 0px rgb(180, 180, 180);
+  box-shadow: 0px 0px 20px 0px rgb(224, 224, 224);
   background-color: rgb(225, 225, 225);
-  width: 370px;
-  height: 280px;
+  width: 23vw;
+  height: 32vh;
   padding: 20px;
   border-radius: 20px;
   position: absolute;
@@ -14,7 +14,6 @@
   }
   .cards {
     position: relative;
-    height: 200px;
     margin-top: 20px;
     img {
       transition: all 0.2s;
@@ -25,7 +24,7 @@
       position: absolute;
       left: 0;
       top: 0%;
-      height: 200px !important;
+      height: 25vh !important;
     }
   }
 }
@@ -37,21 +36,26 @@
 }
 
 .player1 {
-  right: 50%;
-  top: 50%;
-  transform: translate(-90%, -105%);
+  left: 32.5vw;
+  top: 70vh;
+  transform: translate(-32.5vw, -67vh);
 }
 
 .player2 {
-  right: 50%;
-  top: 50%;
-  transform: translate(-90%, 5%);
+  left: 32.5vw;
+  bottom: 70vh;
+  transform: translate(-32.5vw, 67vh);
+}
+
+.current {
+  border: 1px solid rgb(186, 186, 186);
+  background-color: rgb(206, 255, 211);
 }
 
 .dealer {
-  left: 50%;
-  top: 50%;
-  transform: translate(90%, -50%);
+  right: 32.5vw;
+  top: 35vh;
+  transform: translate(32.5vw, -17.5vh);
 }
 
 .bust {
