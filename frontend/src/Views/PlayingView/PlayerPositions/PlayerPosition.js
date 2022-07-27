@@ -23,17 +23,24 @@ export const PlayerPosition = ({ number }) => {
 
   useEffect(() => {
     if (!current) {
-      const player = game.otherPlayersInfo.find(
-        ({ playerNumber }) => playerNumber == number
-      );
-      if (player) {
-        let cards = Array(player.cardCount).fill(null);
-        const { bust } = player;
-        setCards(cards);
-        setBust(bust);
+      if (game.paused) {
+        const player = game.lastRoundCards.players.find(
+          ({ playerNumber }) => playerNumber == number
+        );
+        setCards(player.cards);
+      } else {
+        const player = game.otherPlayersInfo.find(
+          ({ playerNumber }) => playerNumber == number
+        );
+        if (player) {
+          let cards = Array(player.cardCount).fill(null);
+          const { bust } = player;
+          setCards(cards);
+          setBust(bust);
+        }
       }
     }
-  }, [current, game.otherPlayersInfo]);
+  }, [current, game.otherPlayersInfo, game.paused]);
 
   return (
     <div className={styles[`player${number}`]}>

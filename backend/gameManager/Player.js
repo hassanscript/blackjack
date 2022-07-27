@@ -5,16 +5,18 @@ class Player {
     this.playerNumber = playerNumber;
     this.cards = [];
     this.wins = 0;
-    this.loses = 0;
+    this.looses = 0;
     this.ready = false;
     this.bust = false;
+    this.standing = false;
   }
   reset() {
     this.cards = [];
     this.bust = false;
+    this.standing = false;
   }
   receiveCards(cards) {
-    if (!this.bust) this.cards.push(...cards);
+    if (!this.bust && !this.standing) this.cards.push(...cards);
   }
   getPrivateInfo() {
     return this;
@@ -30,17 +32,34 @@ class Player {
     sums = sums.sort((a, b) => b - a).filter((num) => num <= 21);
     const bust = sums.length == 0;
     this.bust = bust;
-    if (bust) this.loses++;
+    if (bust) this.looses++;
     return bust;
   }
   getRoundResult() {
-    const { cards, playerNumber, wins, loses } = this;
+    const { cards, playerNumber, wins, looses } = this;
     return {
       cards,
       playerNumber,
       wins,
-      loses,
+      looses,
     };
+  }
+  ready() {
+    this.ready = true;
+  }
+  stand() {
+    this.standing = true;
+  }
+  didWin(score) {
+    const values = this.cards.map(({ value }) => value);
+    const combinations = generateCombinations(...values);
+    let sums = combinations.map((arr) => arr.reduce((a, b) => a + b, 0));
+    sums = sums.sort((a, b) => b - a).filter((num) => num <= 21);
+    if (sums[0] > score) {
+      this.wins++;
+    } else if (sums[0] < score) {
+      this.looses++;
+    }
   }
 }
 

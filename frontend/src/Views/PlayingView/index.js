@@ -5,6 +5,7 @@ import { ReadyBox } from "./ReadyBox";
 import PlayerPositions from "./PlayerPositions";
 import { ActionButtons } from "./ActionButtons";
 import { useAppStore, useGameStore } from "../../Stores";
+import { ResultBox } from "./ResultBox";
 
 const PlayingView = () => {
   const app = useAppStore();
@@ -45,6 +46,7 @@ const PlayingView = () => {
             <span>GAME CODE</span>
             <h3>{app.gameCode}</h3>
           </div>
+          {game.started && <ResultBox />}
           {game.waiting && <WaitingBox />}
           {!game.waiting && !game.started && <ReadyBox />}
         </div>

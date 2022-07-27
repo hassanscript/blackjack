@@ -10,8 +10,8 @@ export const DealerPosition = () => {
     if (game.paused) {
       setCards(game.lastRoundCards.dealer);
     } else {
-      const { dealerExposedCard } = game;
-      setCards([null, dealerExposedCard]);
+      const { dealer } = game;
+      setCards([null, dealer.exposedCard]);
     }
   }, [game.paused]);
 

@@ -17,7 +17,7 @@ function App() {
       socket.off("connect");
     };
   }, []);
-
+  // 'gameCode' having no value means the client is not connected to any game
   return <Layout>{!gameCode ? <WelcomeView /> : <PlayingView />}</Layout>;
 }
 

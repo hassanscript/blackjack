@@ -22,13 +22,14 @@ export const useGameStore = create((set) => ({
     players: [],
   },
   gameResults: {
-    rounds: 0,
+    rounds: 1,
     playerResults: [],
   },
   setWaiting: (waiting) => set((state) => ({ ...state, waiting })),
   setStarted: (started) => set((state) => ({ ...state, started })),
   setReady: (ready) => set((state) => ({ ...state, ready })),
-  setInitialData: (data) => set((state) => ({ ...state, ...data })),
+  setInitialData: (data) =>
+    set((state) => ({ ...state, paused: false, ...data })),
   updateData: (key, value) => set((state) => ({ ...state, [key]: value })),
   handleBust: (playerNumber) =>
     set((state) => {
@@ -59,11 +60,13 @@ export const useGameStore = create((set) => ({
           cards,
         })),
       };
-      const playerResults = playerInfo.map(({ playerNumber, wins, loses }) => ({
-        playerNumber,
-        wins,
-        loses,
-      }));
+      const playerResults = playerInfo.map(
+        ({ playerNumber, wins, looses }) => ({
+          playerNumber,
+          wins,
+          looses,
+        })
+      );
       const gameResults = {
         rounds,
         playerResults,

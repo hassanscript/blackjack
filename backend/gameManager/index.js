@@ -21,39 +21,31 @@ class GameManager {
     );
     socket.on("HIT", (gameCode) => this.playerAction("hit", gameCode, socket));
     socket.on("STAND", (gameCode) =>
-      this.playerAction("hit", gameCode, socket)
+      this.playerAction("stand", gameCode, socket)
+    );
+    socket.on("NEXT_ROUND", (gameCode) =>
+      this.playerAction("next", gameCode, socket)
     );
   }
 
-  // method to join a new game, takes 2 parameters the game code and the player Id
   joinGame(gameCode, socket) {
-    // in case the game code is not provided, meaning the player is looking to create a new game
     let game;
-    const playerId = socket.id;
+
     if (!gameCode) {
-      // generate a random number
       gameCode = generateRandomNumber();
-      // create a new game object
       game = new Game(gameCode, this.io);
-      // set the new game in the games store
       this.games.set(gameCode, game);
     } else {
       game = this.games.get(gameCode);
     }
+
     if (!game) {
-      return console.log("No game");
+      return socket.emit(
+        "WRONG_GAMECODE",
+        "Game with the provide code doesn't exist"
+      );
     }
-    // now regarding of gameCode being undefined initially, it now has a value
-    // we will now try joining the game
-    const joined = game.join(playerId);
-    socket.join(`game:${gameCode}`);
-    if (joined) {
-      // if game started, then share the gameCode with the client
-      socket.emit("GAME_JOINED", gameCode);
-    } else {
-      // if game failed to start, then let the client know
-      socket.emit("GAME_JOINED", false);
-    }
+    game.join(socket);
     game.isGameReady();
   }
 
@@ -73,6 +65,8 @@ class GameManager {
       game.hit(playerId);
     } else if (action == "stand") {
       game.stand(playerId);
+    } else if (action == "next") {
+      game.next(playerId);
     }
   }
 }
