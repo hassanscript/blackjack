@@ -20,7 +20,7 @@ const io = new Server(server);
 const gameManager = new GameManager(io);
 
 io.on("connection", (socket) => {
-  // handle over the socket connect to game manager on connection
+  // hand over the new socket connections to game manager
   gameManager.manage(socket);
 });
 

@@ -1,7 +1,9 @@
+// a random number generator between 10000 and 99999
 const generateRandomNumber = () =>
   Math.floor(Math.random() * (99999 - 10000)) + 10000;
 
 // stackoverflow to the rescue
+// returns all possible combinations of array of array
 const generateCombinations = (...args) => {
   var r = [],
     max = args.length - 1;

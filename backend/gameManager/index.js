@@ -11,7 +11,7 @@ class GameManager {
     });
   }
 
-  // listens to the requests of the connections
+  // adds event listeners to the connections
   manage = (socket) => {
     // on disconnection, the socket is removed from the game/games
     socket.on("disconnecting", () => {
