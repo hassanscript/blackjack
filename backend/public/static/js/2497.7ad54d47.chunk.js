@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[2497],{2497:function(e,f,n){e.exports=n.p+"static/media/Q_of_spades.4f1242f265a4e0252f31.png"}}]);

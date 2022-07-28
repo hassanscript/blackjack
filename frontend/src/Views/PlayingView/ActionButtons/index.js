@@ -5,16 +5,14 @@ import { socket } from "../../../utils";
 import styles from "./index.module.scss";
 import useSound from "use-sound";
 import hitSound from "../../../Assets/Sounds/hit.wav";
-import standSound from "../../../Assets/Sounds/stand.wav";
 import clickSound from "../../../Assets/Sounds/click.wav";
 
-export const ActionButtons = () => {
+export const ActionButtons = ({ actionDisabled }) => {
   const [loading, setLoading] = useState(false);
   const app = useAppStore();
   const game = useGameStore();
   const { standing, bust } = game.myInfo;
   const [playHit] = useSound(hitSound);
-  const [playStand] = useSound(standSound);
   const [playClick] = useSound(clickSound);
 
   useEffect(() => {
@@ -38,7 +36,7 @@ export const ActionButtons = () => {
     socket.emit("HIT", app.gameCode);
   };
   const onStand = () => {
-    playStand();
+    playClick();
     socket.emit("STAND", app.gameCode);
   };
   const onNextRound = () => {
@@ -71,14 +69,14 @@ export const ActionButtons = () => {
           <>
             <button
               onClick={onHit}
-              disabled={loading || bust || standing}
+              disabled={loading || bust || standing || actionDisabled}
               className={styles.hit}
             >
               HIT
             </button>
             <button
               onClick={onStand}
-              disabled={loading || bust || standing}
+              disabled={loading || bust || standing || actionDisabled}
               className={styles.stand}
             >
               STAND

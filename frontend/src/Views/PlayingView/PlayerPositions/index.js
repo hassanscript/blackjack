@@ -1,11 +1,11 @@
 import { DealerPosition } from "./DealerPosition";
 import { PlayerPosition } from "./PlayerPosition";
 
-const PlayerPositions = () => {
+const PlayerPositions = ({ setActionDisabled }) => {
   return (
     <>
-      <PlayerPosition number={1} />
-      <PlayerPosition number={2} />
+      <PlayerPosition setActionDisabled={setActionDisabled} number={1} />
+      <PlayerPosition setActionDisabled={setActionDisabled} number={2} />
       <DealerPosition />
     </>
   );

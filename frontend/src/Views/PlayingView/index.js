@@ -1,5 +1,5 @@
 import { socket } from "../../utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { WaitingBox } from "./WaitingBox";
 import { ReadyBox } from "./ReadyBox";
 import PlayerPositions from "./PlayerPositions";
@@ -12,6 +12,7 @@ import { Button } from "../../Components";
 const PlayingView = () => {
   const app = useAppStore();
   const game = useGameStore();
+  const [actionDisabled, setActionDisabled] = useState(false);
 
   useEffect(() => {
     socket.on("GAME_READY", () => {
@@ -46,9 +47,11 @@ const PlayingView = () => {
 
   return (
     <div className={styles.playingView}>
-      {game.started && <PlayerPositions />}
+      {game.started && (
+        <PlayerPositions setActionDisabled={setActionDisabled} />
+      )}
       <div className={styles.table}>
-        {game.started && <ActionButtons />}
+        {game.started && <ActionButtons actionDisabled={actionDisabled} />}
         <div className={styles.mat}>
           <div className={styles.leave}>
             <Button label="LEAVE" onClick={onLeave} />

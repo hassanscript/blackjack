@@ -4,7 +4,7 @@ import { useGameStore } from "../../../Stores";
 import styles from "./index.module.scss";
 import winSound from "../../../Assets/Sounds/win.wav";
 import loseSound from "../../../Assets/Sounds/lose.wav";
-import drawSound from "../../../Assets/Sounds/lose.wav";
+import drawSound from "../../../Assets/Sounds/draw.mp3";
 import useSound from "use-sound";
 
 const InfoBox = () => {

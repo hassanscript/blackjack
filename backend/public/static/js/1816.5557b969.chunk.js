@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[1816],{1816:function(e,n,s){e.exports=s.p+"static/media/Q_of_clubs.87909110162e377c06b4.png"}}]);

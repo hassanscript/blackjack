@@ -4,7 +4,7 @@ import { useGameStore } from "../../../Stores";
 import { ReactSVG } from "react-svg";
 import CardStack from "./CardStack";
 
-export const PlayerPosition = ({ number }) => {
+export const PlayerPosition = ({ number, setActionDisabled }) => {
   const game = useGameStore();
   const [current, setCurrent] = useState(false);
   const [cards, setCards] = useState([]);
@@ -18,11 +18,12 @@ export const PlayerPosition = ({ number }) => {
   useEffect(() => {
     if (current) {
       const { cards, bust } = game.myInfo;
+      console.log(cards);
       setBust(bust);
       cards.reverse();
       setCards(cards.reverse());
     }
-  }, [current, game.myInfo.cards.length, game.myInfo.bust]);
+  }, [current, game.myInfo.cards.length, game.myInfo.bust, game.paused]);
 
   useEffect(() => {
     if (!current) {
@@ -57,7 +58,13 @@ export const PlayerPosition = ({ number }) => {
       <h3>
         Player {number} {current && "(You)"}
       </h3>
-      <CardStack cards={cards} />
+      <CardStack
+        current={current}
+        cards={cards}
+        setActionDisabled={(val) => {
+          if (current && setActionDisabled) setActionDisabled(val);
+        }}
+      />
     </div>
   );
 };

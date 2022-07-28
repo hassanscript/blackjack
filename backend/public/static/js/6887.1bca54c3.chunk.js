@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[6887],{6887:function(e,n,t){e.exports=t.p+"static/media/Q_of_hearts.a56771e008a7e9be3cc4.png"}}]);
