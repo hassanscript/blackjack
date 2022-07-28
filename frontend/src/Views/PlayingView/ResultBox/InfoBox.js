@@ -25,8 +25,8 @@ const InfoBox = () => {
       if (lastResult == "win") {
         setResult({ state: "win", text: "YOU WON!" });
         playWin();
-      } else if (lastResult == "looses") {
-        setResult({ state: "looses", text: "YOU LOST!" });
+      } else if (lastResult == "loses") {
+        setResult({ state: "loses", text: "YOU LOST!" });
         playLose();
       } else {
         setResult({ state: "draw", text: "DRAW!" });

@@ -67,10 +67,10 @@ export const useGameStore = create((set) => ({
         })),
       };
       const playerResults = playerInfo.map(
-        ({ playerNumber, wins, looses, lastResult }) => ({
+        ({ playerNumber, wins, loses, lastResult }) => ({
           playerNumber,
           wins,
-          looses,
+          loses,
           lastResult,
         })
       );

@@ -1,3 +1,6 @@
+// This file exports the function that manages the deck
+// It generates a new deck, shuffles it and returns it
+
 const cards = [
   {
     id: "A",
@@ -56,6 +59,8 @@ const suits = ["diamonds", "hearts", "spades", "clubs"];
 
 const generateDeck = () => {
   const deck = [];
+
+  // using the cards array and suits, it generates an array with 52 cards (a full deck)
   cards.forEach((card) =>
     suits.forEach((suit) => {
       const _card = JSON.parse(JSON.stringify(card));
@@ -64,6 +69,7 @@ const generateDeck = () => {
     })
   );
 
+  // shuffling the deck
   const randomizedDeck = deck
     .map((card) => [Math.random(), card])
     .sort()

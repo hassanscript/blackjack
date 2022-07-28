@@ -13,7 +13,7 @@ export const ResultBox = () => {
       const result = game.allPlayersInfo.map(({ playerNumber }) => ({
         playerNumber,
         wins: 0,
-        looses: 0,
+        loses: 0,
       }));
       setResult(result);
     } else {
@@ -29,13 +29,13 @@ export const ResultBox = () => {
           <tr>
             <th>Player</th>
             <th className={styles.count}>Wins</th>
-            <th className={styles.count}>Looses</th>
+            <th className={styles.count}>loses</th>
           </tr>
-          {result.map(({ playerNumber, wins, looses }, index) => (
+          {result.map(({ playerNumber, wins, loses }, index) => (
             <tr key={"result" + index}>
               <td>Player {playerNumber}</td>
               <td className={`${styles.count} ${styles.wins}`}>{wins}</td>
-              <td className={`${styles.count} ${styles.looses}`}>{looses}</td>
+              <td className={`${styles.count} ${styles.loses}`}>{loses}</td>
             </tr>
           ))}
         </tbody>
