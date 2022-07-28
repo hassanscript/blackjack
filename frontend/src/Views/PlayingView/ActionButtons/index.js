@@ -16,10 +16,12 @@ export const ActionButtons = ({ actionDisabled }) => {
   const [playClick] = useSound(clickSound);
 
   useEffect(() => {
+    // when a hit has been successfully registered
     socket.on("HIT_DONE", (myInfo) => {
       game.updateData("myInfo", myInfo);
       setLoading(false);
     });
+    // when a stand has been successfully registered
     socket.on("STAND_DONE", (myInfo) => {
       game.updateData("myInfo", myInfo);
       setLoading(false);
@@ -31,15 +33,19 @@ export const ActionButtons = ({ actionDisabled }) => {
   }, []);
 
   const onHit = () => {
+    // on hit, play hit sound and emit the event with game code
     playHit();
     setLoading(true);
     socket.emit("HIT", app.gameCode);
   };
   const onStand = () => {
+    // on hit, play hit sound and emit the event with game code
     playClick();
     socket.emit("STAND", app.gameCode);
   };
   const onNextRound = () => {
+    // on hit, play hit sound and emit the event with game code
+    // and also set the game state to ready for next round
     playClick();
     socket.emit("NEXT_ROUND", app.gameCode);
     game.readyForNextRound();

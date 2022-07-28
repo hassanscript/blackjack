@@ -10,7 +10,10 @@ const WelcomeView = () => {
   const app = useAppStore();
 
   useEffect(() => {
+    // listens for when the game is joined
     socket.on("GAME_JOINED", (gameCode) => {
+      // when the game is joined, the loading is set to false
+      // the app state is update with the game code
       app.setLoading(false);
       app.setGameCode(gameCode);
     });

@@ -1,5 +1,6 @@
 import create from "zustand";
 
+// the app store
 export const useAppStore = create((set) => ({
   loading: true,
   connected: false,
@@ -9,6 +10,7 @@ export const useAppStore = create((set) => ({
   setGameCode: (gameCode) => set((state) => ({ ...state, gameCode })),
 }));
 
+// the game store, managing the entire state of the game
 export const useGameStore = create((set) => ({
   waiting: true,
   nextRoundReady: false,
@@ -29,6 +31,7 @@ export const useGameStore = create((set) => ({
   setWaiting: (waiting) => set((state) => ({ ...state, waiting })),
   setStarted: (started) => set((state) => ({ ...state, started })),
   setReady: (ready) => set((state) => ({ ...state, ready })),
+  // loads the initial data at the start of the round/game
   setInitialData: (data) =>
     set((state) => ({
       ...state,
@@ -37,6 +40,7 @@ export const useGameStore = create((set) => ({
       ...data,
     })),
   updateData: (key, value) => set((state) => ({ ...state, [key]: value })),
+  // handles the case when any player is bust
   handleBust: (playerNumber) =>
     set((state) => {
       const players = JSON.parse(JSON.stringify(state.allPlayersInfo));
@@ -44,6 +48,8 @@ export const useGameStore = create((set) => ({
       player.bust = true;
       const isSelf = playerNumber == state.myInfo.playerNumber;
       if (isSelf) {
+        // in case the current player if bust
+        // their status is updated
         return {
           ...state,
           myInfo: { ...state.myInfo, bust: true },
@@ -56,9 +62,11 @@ export const useGameStore = create((set) => ({
         };
       }
     }),
+  // handles when the player receives the result for the round
   handleResult: (result) =>
     set((state) => {
       const { dealerCards, playerInfo, rounds } = result;
+      // the last round cards are added to the state, and made visible to all
       const lastRoundCards = {
         dealer: dealerCards,
         players: playerInfo.map(({ playerNumber, cards }) => ({
@@ -66,6 +74,7 @@ export const useGameStore = create((set) => ({
           cards,
         })),
       };
+      // the player results are updates
       const playerResults = playerInfo.map(
         ({ playerNumber, wins, loses, lastResult }) => ({
           playerNumber,
@@ -81,6 +90,7 @@ export const useGameStore = create((set) => ({
       return { ...state, paused: true, gameResults, lastRoundCards };
     }),
   readyForNextRound: () => set((state) => ({ ...state, nextRoundReady: true })),
+  // when the game is reset, when thing is revert to default
   reset: () =>
     set(() => ({
       waiting: true,

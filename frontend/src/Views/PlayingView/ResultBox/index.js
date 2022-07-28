@@ -9,6 +9,8 @@ export const ResultBox = () => {
   const [result, setResult] = useState([]);
   useEffect(() => {
     const { playerResults } = game.gameResults;
+    // in case the results is empty, meaning no wins/loses
+    // the starting array is generated to be displayed
     if (playerResults.length == 0) {
       const result = game.allPlayersInfo.map(({ playerNumber }) => ({
         playerNumber,

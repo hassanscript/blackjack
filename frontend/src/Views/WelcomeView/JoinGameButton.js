@@ -23,6 +23,7 @@ const JoinGameButton = () => {
     // take care of when gamecode is invalid or missing
     if (gameCode) {
       setError("");
+      // on join game, the client request to join the game
       socket.emit("JOIN_GAME", gameCode);
       app.setLoading(true);
     }

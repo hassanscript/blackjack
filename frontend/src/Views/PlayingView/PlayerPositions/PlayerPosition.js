@@ -18,7 +18,6 @@ export const PlayerPosition = ({ number, setActionDisabled }) => {
   useEffect(() => {
     if (current) {
       const { cards, bust } = game.myInfo;
-      console.log(cards);
       setBust(bust);
       cards.reverse();
       setCards(cards.reverse());
