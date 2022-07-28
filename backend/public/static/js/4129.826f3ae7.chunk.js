@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[4129],{4129:function(n,e,c){n.exports=c.p+"static/media/J_of_diamonds.c057c80f32a226c514b3.png"}}]);
