@@ -16,11 +16,16 @@ class Player {
   }
 
   // on reset, all the stats etc of the player are set to default
-  reset() {
+  // if complete = true, then reset the wins and loses as well
+  reset(complete = false) {
     this.cards = [];
     this.bust = false;
     this.standing = false;
     this.lastResult = null;
+    if (complete) {
+      this.loses = 0;
+      this.wins = 0;
+    }
   }
 
   // the method to receive cards
@@ -82,6 +87,11 @@ class Player {
     this.standing = true;
   }
 
+  // simple method to make the player ready
+  setReady() {
+    this.ready = true;
+  }
+
   // check if the player is winning, considering they were standing
   // takes the score of the dealer are the parameter
   didWin(score) {
@@ -102,6 +112,7 @@ class Player {
     this.wins++;
     this.lastResult = "win";
   }
+
   lose() {
     this.loses++;
     this.lastResult = "loses";

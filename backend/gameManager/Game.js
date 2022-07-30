@@ -23,13 +23,15 @@ class Game {
     this.maxPlayerCount = 2;
   }
 
+  playerCount = () => Object.keys(this.players).length;
+
   // method to check if the game has space for new players
-  canJoin = () => Object.keys(this.players).length < this.maxPlayerCount;
+  canJoin = () => this.playerCount() < this.maxPlayerCount;
 
   // checks if the max number of players have joined the game
   // if they did, then it lets the current players know
   isGameReady = () => {
-    if (Object.keys(this.players).length == this.maxPlayerCount) {
+    if (this.playerCount() == this.maxPlayerCount) {
       this.io.to(this.roomCode).emit("GAME_READY", true);
     }
   };
@@ -287,8 +289,8 @@ class Game {
       // the remaining players are reset and informed that one of the player left
       // game is reset to new game
       Object.values(this.players).map((player) => {
-        player.reset();
-        player.ready = false;
+        player.reset(true);
+        player.setReady();
       });
       this.dealer.reset();
       this.rounds = 1;

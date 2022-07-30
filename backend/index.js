@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
   gameManager.manage(socket);
 });
 
-const port = process.env.PORT || 3003;
+const port = process.env.PORT || 3005;
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
