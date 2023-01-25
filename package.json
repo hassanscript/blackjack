@@ -1,0 +1,24 @@
+{
+  "name": "blackjack",
+  "version": "1.0.0",
+  "description": "**2 player online black jack game**",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp",
+    "start": "cd build &&  node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hassanscript/blackjack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hassanscript/blackjack/issues"
+  },
+  "homepage": "https://github.com/hassanscript/blackjack#readme",
+  "devDependencies": {
+    "del": "^7.0.0",
+    "gulp": "^4.0.2"
+  }
+}
