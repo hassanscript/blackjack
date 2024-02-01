@@ -3,6 +3,7 @@
 **2 player online black jack game**
 
 Backend ready to handle more players. Feel free to make changes to the frontend.
+Play it online at https://blackjack.hassanscript.com/
 
 ## Techstack
 
@@ -13,8 +14,6 @@ Backend ready to handle more players. Feel free to make changes to the frontend.
 ### Running the game on localhost
 
 - clone the repo to your computer
-- install package in the `backend` and `frontend`, using the `npm install` command
-- build the react application in `frontend` folder, using `npm run build`
-- copy all the files from the `frontend/build` and paste them in `backend/public`
-- execute the command `npm start` in the `backend` folder
-- You will have the game running on port 3003
+- run the command `npm install` then the command `gulp`
+- execute the command `npm start` in the newly created `build` folder
+- You will have the game running on port 3005 (feel free to change it using the env variable `PORT`)
